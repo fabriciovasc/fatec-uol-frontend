@@ -12,7 +12,7 @@ interface AudioOptions {
   }
 }
 
-export default function (options: AudioOptions = {audio: {timeout: 1000, excludeIOS: true}}): Promise<any> {
+export default function (options: AudioOptions = {audio: {timeout: 1000, excludeIOS: true}}): Promise<AudioResult> {
   return new Promise((done, reject) => {
     const audioOptions = options.audio;
 
@@ -24,7 +24,7 @@ export default function (options: AudioOptions = {audio: {timeout: 1000, exclude
     const AudioContext: any = window.OfflineAudioContext;
 
     if (!AudioContext) {
-      return done('')
+      return done({hash: '', rawData: ''})
     }
 
     let context: any = new AudioContext(1, 44100, 44100);

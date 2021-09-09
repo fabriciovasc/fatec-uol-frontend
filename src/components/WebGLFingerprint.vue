@@ -6,11 +6,18 @@
 
 <script lang="ts">
 import {Vue} from 'vue-class-component';
+import webGL from '@/core/webGL-module'
 
 export default class WebGLFingerprint extends Vue {
+
+  getHash(): string {
+    const { hash } = webGL();
+    return hash;
+  }
+
   data() {
     return {
-      hash: 'xxxyyyzzz'
+      hash: this.getHash()
     }
   }
 }

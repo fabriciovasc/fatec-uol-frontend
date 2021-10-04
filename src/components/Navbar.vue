@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link to="/" class="nav-link" aria-current="page">Análise</router-link>
+            <router-link to="/" class="nav-link" aria-current="page">Criar e-mail</router-link>
           </li>
         </ul>
       </div>

@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {Vue} from 'vue-class-component';
-import canvas from '@/core/canvas-module'
+import canvas from '@/core/CanvasModule'
 
 export default class CanvasFingerprint extends Vue {
 

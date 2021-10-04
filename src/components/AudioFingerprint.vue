@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {Vue} from 'vue-class-component';
-import audio from '@/core/audio-module'
+import audio from '@/core/AudioModule'
 
 export default class AudioFingerprint extends Vue {
 

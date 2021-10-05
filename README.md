@@ -1,24 +1,19 @@
-# fingerprint-uol
+# fatec-uol-frontend
+Repositório de desenvolvimento do front-end do Aprendizado por Projeto Integrador (API) da FATEC São José dos Campos.
 
-## Project setup
+## :clipboard: Requisitos
+Você precisará do Node.js versão 6.0 ou superior instalado em seu sistema.
+
+## :gear: Configuração
+Clonar o projeto
+```
+git clone git@github.com:fabsvas/fatec-uol-frontend.git
+```
+Instalar dependências
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
+Rodar projeto
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

@@ -43,7 +43,7 @@
 
 </template>
 
-<script lang="ts">
+<script>
 
 import {email, minLength, required, helpers} from '@vuelidate/validators';
 import {computed, reactive} from 'vue';
@@ -90,7 +90,7 @@ export default {
     async submitForm() {
       await this.v$.$validate();
       if (!this.v$.$error) {
-        const data: Registration = {
+        const data = {
           email: this.v$.email.$model,
           password: this.v$.password.$model,
           name: this.v$.fullName.$model,

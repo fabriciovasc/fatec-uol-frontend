@@ -60,7 +60,9 @@
     </div>
 
     <div class="col-12 mb-2 text-end">
-      <button class="btn btn-success" type="submit" :disabled="v$.$errors.length">Criar e-mail</button>
+      <button class="btn btn-success" type="submit" :disabled="v$.$invalid">
+        Criar e-mail <fa icon="arrow-right"></fa>
+      </button>
     </div>
   </form>
 
@@ -88,7 +90,7 @@ export default {
     const rules = computed(() => {
       return {
         email: {
-          required: helpers.withMessage('E-mail é obrigatório', required), email: helpers.withMessage('E-mail inválido', email)
+          required: helpers.withMessage('E-mail é obrigatório', required)
         },
         password: {
           required: helpers.withMessage('Senha é obrigatória', required), minLength: helpers.withMessage('Mínimo 8 caracteres', minLength(8))
@@ -111,9 +113,11 @@ export default {
   methods: {
     async submitForm() {
       await this.v$.$validate();
+      const [username] = this.v$.email.$model.toString()?.split('@');
       if (!this.v$.$error) {
+
         const data = {
-          email: this.v$.email.$model,
+          email: `${username}@bol.com.br`,
           password: this.v$.password.$model,
           name: this.v$.fullName.$model,
           cellphone: this.v$.cellphone.$model,

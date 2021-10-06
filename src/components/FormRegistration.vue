@@ -4,39 +4,62 @@
       Inscreva-se
     </h4>
 
-    <div class="mb-3">
+    <div class="mb-2">
       <label for="email" class="form-label">Email</label>
-      <input type="text" class="form-control" id="email" required v-model="v$.email.$model">
-      <small class="input-errors text-danger" v-for="(error, index) of v$.email.$errors" :key="index">
+      <div class="input-group">
+        <div class="input-group-text">
+          <fa icon="envelope" />
+        </div>
+        <input type="text" class="form-control" placeholder="fulano" :class="{'is-invalid': v$.email.$error && v$.email.$dirty, 'is-valid': !v$.email.$error && v$.email.$dirty}" id="email" v-model="v$.email.$model">
+        <div class="input-group-text">
+          @bol.com.br
+        </div>
+      </div>
+      <small class="text-danger d-block" v-for="(error, index) of v$.email.$errors" :key="index">
         {{ error.$message }}
       </small>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-2">
       <label for="password" class="form-label">Senha</label>
-      <input type="password" class="form-control" id="password" required v-model="v$.password.$model">
-      <small class="input-errors text-danger" v-for="(error, index) of v$.password.$errors" :key="index">
+      <div class="input-group">
+        <div class="input-group-text">
+          <fa icon="lock" />
+        </div>
+        <input type="password" class="form-control" placeholder="Insira uma senha" :class="{'is-invalid': v$.password.$error && v$.password.$dirty, 'is-valid': !v$.password.$error && v$.password.$dirty}" id="password" v-model="v$.password.$model">
+      </div>
+      <small class="text-danger d-block" v-for="(error, index) of v$.password.$errors" :key="index">
         {{ error.$message }}
       </small>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-2">
       <label for="fullName" class="form-label">Nome</label>
-      <input type="text" class="form-control" id="fullName" required v-model="v$.fullName.$model">
-      <small class="input-errors text-danger" v-for="(error, index) of v$.fullName.$errors" :key="index">
+      <div class="input-group">
+        <div class="input-group-text">
+          <fa icon="user"></fa>
+        </div>
+        <input type="text" class="form-control" placeholder="Insira o nome completo" :class="{'is-invalid': v$.fullName.$invalid && v$.fullName.$dirty, 'is-valid': !v$.fullName.$invalid && v$.fullName.$dirty}" id="fullName" v-model="v$.fullName.$model">
+      </div>
+      <small class="invalid-feedback" v-for="(error, index) of v$.fullName.$errors" :key="index">
         {{ error.$message }}
       </small>
     </div>
 
-    <div class="mb-3">
+    <div class="mb-2">
       <label for="cellphone" class="form-label">Telefone</label>
-      <input type="text" class="form-control" id="cellphone" required v-model="v$.cellphone.$model">
-      <small class="input-errors text-danger" v-for="(error, index) of v$.cellphone.$errors" :key="index">
+      <div class="input-group">
+        <div class="input-group-text">
+          <fa icon="phone"></fa>
+        </div>
+        <input type="text" class="form-control" placeholder="Insira o número do telefone" :class="{'is-invalid': v$.cellphone.$error && v$.cellphone.$dirty, 'is-valid': !v$.cellphone.$error && v$.cellphone.$dirty}" id="cellphone" v-model="v$.cellphone.$model">
+      </div>
+      <small class="invalid-feedback" v-for="(error, index) of v$.cellphone.$errors" :key="index">
         {{ error.$message }}
       </small>
     </div>
 
-    <div class="col-12 mb-3 text-end">
+    <div class="col-12 mb-2 text-end">
       <button class="btn btn-success" type="submit" :disabled="v$.$errors.length">Criar e-mail</button>
     </div>
   </form>
@@ -49,7 +72,6 @@ import {email, minLength, required, helpers} from '@vuelidate/validators';
 import {computed, reactive} from 'vue';
 import useVuelidate from '@vuelidate/core';
 import RegistrationService from '@/services/RegistrationService';
-import {Registration} from '@/models/RegistrationModel';
 import Swal from 'sweetalert2'
 
 export default {
@@ -61,7 +83,7 @@ export default {
       cellphone: ''
     });
 
-    const mustBeFirstNameAndLastName = (v) => v.split('').length >= 2;
+    const mustBeFirstNameAndLastName = (v) => v.trim().split(' ').length >= 2;
 
     const rules = computed(() => {
       return {
@@ -69,10 +91,10 @@ export default {
           required: helpers.withMessage('E-mail é obrigatório', required), email: helpers.withMessage('E-mail inválido', email)
         },
         password: {
-          required: helpers.withMessage('Senha é obrigatória', required), email: helpers.withMessage('Mínimo 8 caracteres', minLength(8))
+          required: helpers.withMessage('Senha é obrigatória', required), minLength: helpers.withMessage('Mínimo 8 caracteres', minLength(8))
         },
         fullName: {
-          required: helpers.withMessage('Nome completo é obrigatório', required), email: helpers.withMessage('Você deve preencher nome e sobrenome', mustBeFirstNameAndLastName)
+          required: helpers.withMessage('Nome completo é obrigatório', required), mustBeLength: helpers.withMessage('Você deve preencher nome e sobrenome', mustBeFirstNameAndLastName)
         },
         cellphone: {
           required: helpers.withMessage('Telefone é obrigatório', required)

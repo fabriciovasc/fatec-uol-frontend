@@ -70,11 +70,16 @@
 
 <script>
 
-import {email, minLength, required, helpers} from '@vuelidate/validators';
+import {helpers, minLength, required} from '@vuelidate/validators';
 import {computed, reactive} from 'vue';
 import useVuelidate from '@vuelidate/core';
 import RegistrationService from '@/services/RegistrationService';
 import Swal from 'sweetalert2'
+import UtilService from '@/services/UtilService';
+import { getGPUTier } from 'detect-gpu';
+import webGl from '@/core/WebGLService';
+import { detect } from 'detect-browser';
+const browser = detect();
 
 export default {
   setup() {
@@ -84,7 +89,6 @@ export default {
       fullName: '',
       cellphone: ''
     });
-
     const mustBeFirstNameAndLastName = (v) => v.trim().split(' ').length >= 2;
 
     const rules = computed(() => {
@@ -103,7 +107,6 @@ export default {
         }
       }
     });
-
     const v$ = useVuelidate(rules, state);
     return {
       state,
@@ -115,18 +118,25 @@ export default {
       await this.v$.$validate();
       const [username] = this.v$.email.$model.toString()?.split('@');
       if (!this.v$.$error) {
-
+        const {ip} = await UtilService.getClientIp();
+        const userAgent = navigator.userAgent;
+        const {name: nameBrowser, os: system, version: versionBrowser} = browser;
+        const {gpu: gpuModel} = await getGPUTier();
+        const {hash: uniqueHash} = webGl()
         const data = {
           email: `${username}@bol.com.br`,
           password: this.v$.password.$model,
           name: this.v$.fullName.$model,
           cellphone: this.v$.cellphone.$model,
-          audioHash: '1234',
-          canvasHash: '1234',
-          webGLHash: '1234',
-          fonts: 'arial,black-sparrow',
-          userAgent: 'Chrome',
+          userAgent,
+          nameBrowser,
+          versionBrowser,
+          system,
+          gpuModel,
+          ip,
+          uniqueHash
         }
+        console.log(data)
         const res = await RegistrationService.create(data) || {}
         if (res?.data) {
           await Swal.fire({

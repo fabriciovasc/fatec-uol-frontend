@@ -10,7 +10,10 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link to="/" class="nav-link" aria-current="page">Criar e-mail</router-link>
+            <router-link to="/" class="nav-link" aria-current="page">Inscreva-se</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/registration" class="nav-link" aria-current="page">Cadastros</router-link>
           </li>
         </ul>
       </div>

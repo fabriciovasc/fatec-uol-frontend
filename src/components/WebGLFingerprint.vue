@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {Vue} from 'vue-class-component';
-import webGL from '@/core/WebGLModule'
+import webGL from '@/core/WebGLService'
 
 export default class WebGLFingerprint extends Vue {
 

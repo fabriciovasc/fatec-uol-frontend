@@ -1,7 +1,9 @@
 <template>
   <nav id="nav" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container-fluid">
-      <a class="navbar-brand">UOL</a>
+      <a class="navbar-brand">
+        <img src="../assets/logo.png" class="ico" alt="Uol">
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,7 +12,10 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link to="/" class="nav-link" aria-current="page">Criar e-mail</router-link>
+            <router-link to="/sign-up" class="nav-link" aria-current="page">Inscreva-se</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/registration" class="nav-link" aria-current="page">Cadastros</router-link>
           </li>
         </ul>
       </div>
@@ -31,6 +36,9 @@ export default {
     &.router-link-exact-active {
       color: #fff;
     }
+  }
+  .ico {
+    width: 30px;
   }
 }
 </style>

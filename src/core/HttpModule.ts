@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const baseURL = 'https://8080-plum-dormouse-qwr6rh3l.ws-us18.gitpod.io/api';
+const API_URL = process.env.VUE_APP_ROOT_API || 'http://localhost:8000/'
+
+const baseURL = `${API_URL}api`;
 const headers = {
   'Content-Type': 'application/json'
 };

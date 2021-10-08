@@ -1,76 +1,106 @@
 <template>
-  <form @submit.prevent="submitForm" class="row g-3">
-    <h4 class="col-12 mb-3 text-center">
-      Inscreva-se
-    </h4>
+  <h1 class="text-center">Inscreva-se</h1>
+  <b-form @submit.prevent="submitForm" class="row">
 
-    <div class="mb-2">
-      <label for="email" class="form-label">Email</label>
-      <div class="input-group">
-        <div class="input-group-text">
-          <fa icon="envelope" />
-        </div>
-        <input type="text" class="form-control" placeholder="fulano" :class="{'is-invalid': v$.email.$error && v$.email.$dirty, 'is-valid': !v$.email.$error && v$.email.$dirty}" id="email" v-model="v$.email.$model">
-        <div class="input-group-text">
-          @bol.com.br
-        </div>
-      </div>
-      <small class="text-danger d-block" v-for="(error, index) of v$.email.$errors" :key="index">
-        {{ error.$message }}
-      </small>
+    <div class="col-12 mb-4">
+      <label class="form-label">E-mail</label>
+      <b-input-group>
+        <template #prepend>
+          <b-input-group-text>
+            <b-icon-envelope></b-icon-envelope>
+          </b-input-group-text>
+        </template>
+
+        <b-form-input placeholder="Insira um e-mail"
+                      trim
+                      v-model="v$.email.$model"
+                      @blur="v$.email.$touch()"
+                      :state="v$.email.$dirty ? !v$.email.$errors.length : null"></b-form-input>
+      </b-input-group>
     </div>
 
-    <div class="mb-2">
-      <label for="password" class="form-label">Senha</label>
-      <div class="input-group">
-        <div class="input-group-text">
-          <fa icon="lock" />
-        </div>
-        <input type="password" class="form-control" placeholder="Insira uma senha" :class="{'is-invalid': v$.password.$error && v$.password.$dirty, 'is-valid': !v$.password.$error && v$.password.$dirty}" id="password" v-model="v$.password.$model">
-      </div>
-      <small class="text-danger d-block" v-for="(error, index) of v$.password.$errors" :key="index">
-        {{ error.$message }}
-      </small>
+    <div class="col-12 mb-4">
+      <label class="form-label">Senha</label>
+      <b-input-group>
+        <template #prepend>
+          <b-input-group-text>
+            <b-icon-lock></b-icon-lock>
+          </b-input-group-text>
+        </template>
+
+        <b-form-input v-if="hidden"
+                      type="password"
+                      trim
+                      placeholder="Crie uma senha"
+                      v-model="v$.password.$model"
+                      @blur="v$.password.$touch()"
+                      :state="v$.password.$dirty ? !v$.password.$errors.length : null"></b-form-input>
+
+        <b-form-input v-if="!hidden"
+                      type="text"
+                      placeholder="Crie uma senha"
+                      v-model="v$.password.$model"
+                      @blur="v$.password.$touch()"
+                      :state="v$.password.$dirty ? !v$.password.$errors.length : null"></b-form-input>
+
+        <template #append>
+          <b-button variant="outline-secondary" @click.prevent="hidden = !hidden">
+            <b-icon-eye v-if="hidden"></b-icon-eye>
+            <b-icon-eye-slash v-if="!hidden"></b-icon-eye-slash>
+          </b-button>
+        </template>
+      </b-input-group>
     </div>
 
-    <div class="mb-2">
-      <label for="fullName" class="form-label">Nome</label>
-      <div class="input-group">
-        <div class="input-group-text">
-          <fa icon="user"></fa>
-        </div>
-        <input type="text" class="form-control" placeholder="Insira o nome completo" :class="{'is-invalid': v$.fullName.$invalid && v$.fullName.$dirty, 'is-valid': !v$.fullName.$invalid && v$.fullName.$dirty}" id="fullName" v-model="v$.fullName.$model">
-      </div>
-      <small class="invalid-feedback" v-for="(error, index) of v$.fullName.$errors" :key="index">
-        {{ error.$message }}
-      </small>
+    <div class="col-12 mb-4">
+      <label class="form-label">Nome</label>
+      <b-input-group>
+        <template #prepend>
+          <b-input-group-text>
+            <b-icon-person></b-icon-person>
+          </b-input-group-text>
+        </template>
+
+        <b-form-input placeholder="Nome completo"
+                      trim
+                      v-model="v$.fullName.$model"
+                      @blur="v$.fullName.$touch()"
+                      :state="v$.fullName.$dirty ? !v$.fullName.$errors.length : null"></b-form-input>
+      </b-input-group>
     </div>
 
-    <div class="mb-2">
-      <label for="cellphone" class="form-label">Telefone</label>
-      <div class="input-group">
-        <div class="input-group-text">
-          <fa icon="phone"></fa>
-        </div>
-        <input type="text" class="form-control" placeholder="Insira o número do telefone" :class="{'is-invalid': v$.cellphone.$error && v$.cellphone.$dirty, 'is-valid': !v$.cellphone.$error && v$.cellphone.$dirty}" id="cellphone" v-model="v$.cellphone.$model">
-      </div>
-      <small class="invalid-feedback" v-for="(error, index) of v$.cellphone.$errors" :key="index">
-        {{ error.$message }}
-      </small>
+    <div class="col-12 mb-4">
+      <label class="form-label">Telefone</label>
+      <b-input-group>
+        <template #prepend>
+          <b-input-group-text>
+            <b-icon-phone></b-icon-phone>
+          </b-input-group-text>
+        </template>
+
+        <b-form-input placeholder="Insira um telefone"
+                      v-model="v$.cellphone.$model"
+                      @blur="v$.cellphone.$touch()"
+                      :state="v$.cellphone.$dirty ? !v$.cellphone.$errors.length : null"
+                      v-maska="'(##) #####-####'">
+
+        </b-form-input>
+      </b-input-group>
     </div>
 
-    <div class="col-12 mb-2 text-end">
-      <button class="btn btn-success" type="submit" :disabled="v$.$invalid">
-        Criar e-mail <fa icon="arrow-right"></fa>
-      </button>
+    <div class="col-12 mb-4 text-end">
+      <b-button type="submit" variant="success" :disabled="v$.$invalid || status === 'LOADING'">
+        <b-spinner small v-if="status === 'LOADING'"></b-spinner> Criar e-mail <b-icon-chevron-right></b-icon-chevron-right>
+      </b-button>
     </div>
-  </form>
+
+  </b-form>
 
 </template>
 
 <script>
 
-import {helpers, minLength, required} from '@vuelidate/validators';
+import {helpers, minLength, required, email} from '@vuelidate/validators';
 import {computed, reactive} from 'vue';
 import useVuelidate from '@vuelidate/core';
 import RegistrationService from '@/services/RegistrationService';
@@ -94,7 +124,8 @@ export default {
     const rules = computed(() => {
       return {
         email: {
-          required: helpers.withMessage('E-mail é obrigatório', required)
+          required: helpers.withMessage('E-mail é obrigatório', required),
+          email: helpers.withMessage('Formato de e-mail inválido', email)
         },
         password: {
           required: helpers.withMessage('Senha é obrigatória', required), minLength: helpers.withMessage('Mínimo 8 caracteres', minLength(8))
@@ -113,11 +144,18 @@ export default {
       v$
     }
   },
+  data() {
+    return {
+      status: '',
+      hidden: true
+    }
+  },
   methods: {
     async submitForm() {
+      this.status = 'LOADING';
       await this.v$.$validate();
       const [username] = this.v$.email.$model.toString()?.split('@');
-      if (!this.v$.$error) {
+      if (!this.v$.$invalid) {
         const {ip} = await UtilService.getClientIp();
         const userAgent = navigator.userAgent;
         const {name: nameBrowser, os: system, version: versionBrowser} = browser;
@@ -137,18 +175,25 @@ export default {
           uniqueHash
         }
         console.log(data)
-        const res = await RegistrationService.create(data) || {}
-        if (res?.data) {
+        const {data: id, error} = await RegistrationService.create(data)
+        if (!error && id) {
+          this.status = 'SUCCESS';
           await Swal.fire({
             icon: 'success',
             title: 'E-mail criado com sucesso'
           })
         } else {
+          this.status = 'ERROR';
           await Swal.fire({
             icon: 'error',
             title: 'Não foi possível criar um e-mail'
           })
         }
+      } else {
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Existem campos inválidos'
+        })
       }
     }
   }

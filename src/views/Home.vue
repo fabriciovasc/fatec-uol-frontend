@@ -2,7 +2,7 @@
   <div class="home container vh-100">
     <div class="row h-100">
 
-      <div class="col-12 col-md-6 offset-md-3 my-auto">
+      <div >
         <FormRegistration></FormRegistration>
       </div>
 
@@ -10,9 +10,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
+
 import {Options, Vue} from 'vue-class-component';
-import FormRegistration from '@/components/FormRegistration.vue';
+import FormRegistration from '@/components/FormRegistration';
 
 @Options({
   components: {

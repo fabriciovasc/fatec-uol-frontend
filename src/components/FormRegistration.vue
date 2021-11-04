@@ -1,10 +1,15 @@
 <template>
-  <div v-on:wheel="onWheel($event)" class="col-12 text-center rounded mb-5"
+  <div class="col-12 text-center rounded mb-5"
        style="background-color: #0cb3a1; height: 500px;">
     <img src="../assets/logo-bol.png">
     <div class="h-100 d-flex flex-column justify-content-evenly">
       <h2 class="m-0 px-2 text-black">
         Inscreva-se grátis agora mesmo e tenha os melhores benefícios :)
+
+        <b-button-group>
+          <b-button variant="outline-dark" v-bind:active="plan === 'FREE'" v-on:click="plan = 'FREE'">Plano grátis</b-button>
+          <b-button variant="outline-dark" v-bind:active="plan === 'PREMIUM'" v-on:click="plan = 'PREMIUM'">Plano premium</b-button>
+        </b-button-group>
       </h2>
       <b-button class="mb-2" variant="dark" size="lg" v-on:click="showForm = !showForm; showedRegisterDate = new Date()">
         Quero me inscrever
@@ -126,8 +131,15 @@ import {email, helpers, minLength, required, sameAs} from '@vuelidate/validators
 import {computed, reactive} from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {detect} from 'detect-browser';
+import scroll from 'scroll-speed'
+import Swal from 'sweetalert2'
+import UtilService from '@/services/UtilService';
+import RegistrationService from '@/services/RegistrationService';
+import {getGPUTier} from 'detect-gpu'
+import WebGLService from '@/core/WebGLService';
 
 const browser = detect();
+
 
 export default {
   setup() {
@@ -170,93 +182,105 @@ export default {
     return {
       status: '',
       hidden: true,
-      startRegisterDate: new Date().getTime(),
+      startRegisterDate: new Date(),
       acceptedTermsDate: '',
       showForm: false,
-      wheel: {
-        am: 0,
-        time: new Date().getTime(),
-        lastTime: 0,
-        milis: [],
-        deltas: []
-      }
+      scroll_speed: null,
+      scroll_y: [],
+      scroll_x: [],
+      time: 0,
+      lastTime: 0,
+      scroll_millis: [],
+      plan: ''
     }
   },
   methods: {
     async submitForm() {
-      console.log(this.wheel)
-      console.log('start', this.showedRegisterDate)
-      const endRegisterDate = new Date()
-      console.log('duration', Math.abs(endRegisterDate - this.startRegisterDate))
-      console.log('terms', this.acceptedTermsDate)
-      // this.status = 'LOADING';
-      // await this.v$.$validate();
-      // const [username] = this.v$.email.$model.toString()?.split('@');
-      // if (!this.v$.$invalid) {
-      //   const endRegisterDate = new Date().getTime() / 1000
-      //   const registerDuration = Math.abs(endRegisterDate - this.startRegisterDate)
-      //   const {ip} = await UtilService.getClientIp();
-      //   const userAgent = navigator.userAgent;
-      //   const {name: nameBrowser, os: system, version: versionBrowser} = browser;
-      //   const {gpu: gpuModel} = await getGPUTier();
-      //   const {hash: uniqueHash} = webGl()
-      //   const data = {
-      //     email: `${username}@bol.com.br`,
-      //     password: this.v$.password.$model,
-      //     name: this.v$.fullName.$model,
-      //     cellphone: this.v$.cellphone.$model,
-      //     userAgent,
-      //     nameBrowser,
-      //     versionBrowser,
-      //     system,
-      //     gpuModel,
-      //     ip,
-      //     uniqueHash,
-      //     maxTimestamp,
-      //     minTimestamp: this.maxTimestamp,
-      //     registerDuration
-      //   }
-      //   console.log(data)
-      //   const {data: id, error} = await RegistrationService.create(data)
-      //   if (!error && id) {
-      //     this.status = 'SUCCESS';
-      //     await Swal.fire({
-      //       icon: 'success',
-      //       title: 'E-mail criado com sucesso'
-      //     })
-      //   } else {
-      //     this.status = 'ERROR';
-      //     await Swal.fire({
-      //       icon: 'error',
-      //       title: 'Não foi possível criar um e-mail'
-      //     })
-      //   }
-      // } else {
-      //   await Swal.fire({
-      //     icon: 'warning',
-      //     title: 'Existem campos inválidos'
-      //   })
-      // }
-    },
-    onWheel(evt) {
-      this.wheel.am++;
-      const cmilis = this.wheel.time - this.wheel.lastTime;
-      if (this.wheel.lastTime) {
-        this.wheel.milis.push(cmilis);
+      if (!this.plan) {
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Escolha um plano'
+        })
+        return;
       }
-
-      this.wheel.lastTime = this.wheel.time;
-
-      this.wheel.deltas.push(Math.max(evt.deltaX, evt.deltaY, evt.deltaZ));
-    },
-    initInterval() {
-      setInterval(() => {
-        this.wheel.time++;
-      }, 1);
+      const endRegisterDate = new Date()
+      const registerDuration = Math.abs(endRegisterDate - this.startRegisterDate)
+      const acceptedTermsDuration = Math.abs(this.acceptedTermsDate - this.startRegisterDate)
+      console.log({
+        endRegisterDate,
+        registerDuration,
+        acceptedTermsDuration,
+        scroll_x: this.scroll_x,
+        scroll_y: this.scroll_y,
+        millis: this.scroll_millis
+      })
+      this.status = 'LOADING';
+      await this.v$.$validate();
+      const [username] = this.v$.email.$model.toString()?.split('@');
+      if (!this.v$.$invalid) {
+        const endRegisterDate = new Date()
+        const registerDuration = Math.abs(endRegisterDate - this.startRegisterDate)
+        const acceptedTermsDuration = Math.abs(this.acceptedTermsDate - this.startRegisterDate)
+        const {ip} = await UtilService.getClientIp();
+        const userAgent = navigator.userAgent;
+        const {name: nameBrowser, os: system, version: versionBrowser} = browser;
+        const {gpu: gpuModel} = await getGPUTier();
+        const {hash: uniqueHash} = WebGLService()
+        const data = {
+          email: `${username}@bol.com.br`,
+          password: this.v$.password.$model,
+          name: this.v$.fullName.$model,
+          cellphone: this.v$.cellphone.$model,
+          userAgent,
+          nameBrowser,
+          versionBrowser,
+          system,
+          gpuModel,
+          ip,
+          uniqueHash,
+          registerDuration,
+          acceptedTermsDuration,
+          startRegisterDate: this.startRegisterDate,
+          endRegisterDate,
+          scroll_x: this.scroll_x,
+          scroll_y: this.scroll_y,
+          scroll_millis: this.scroll_millis
+        }
+        console.log(data)
+        const {data: id, error} = await RegistrationService.create(data)
+        if (!error && id) {
+          this.status = 'SUCCESS';
+          await Swal.fire({
+            icon: 'success',
+            title: 'E-mail criado com sucesso'
+          })
+        } else {
+          this.status = 'ERROR';
+          await Swal.fire({
+            icon: 'error',
+            title: 'Não foi possível criar um e-mail'
+          })
+        }
+      } else {
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Existem campos inválidos'
+        })
+      }
     }
   },
   created() {
-    this.initInterval();
+    setInterval(() => {
+      this.time++;
+    }, 1);
+    this.scroll_speed = scroll()
+    this.scroll_speed.on('scroll', ({0: horizontal, 1: vertical}) => {
+      const cmillis = this.time - this.lastTime;
+      if (this.lastTime) this.scroll_millis.push(cmillis)
+      this.lastTime = this.time;
+      this.scroll_x.push(horizontal);
+      this.scroll_y.push(vertical);
+    })
   }
 }
 

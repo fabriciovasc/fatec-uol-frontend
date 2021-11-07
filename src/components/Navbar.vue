@@ -2,7 +2,7 @@
   <nav id="nav" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container-fluid">
       <a class="navbar-brand">
-        <img src="../assets/logo.png" class="ico" alt="Uol">
+        Bol.com.br
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

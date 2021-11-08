@@ -6,10 +6,13 @@
       <h2 class="m-0 px-2 text-black">
         Inscreva-se grátis agora mesmo e tenha os melhores benefícios :)
 
-        <b-button-group>
-          <b-button variant="outline-dark" v-bind:active="plan === 'FREE'" v-on:click="plan = 'FREE'">Plano grátis</b-button>
-          <b-button variant="outline-dark" v-bind:active="plan === 'PREMIUM'" v-on:click="plan = 'PREMIUM'">Plano premium</b-button>
-        </b-button-group>
+        <div>
+          <b-button-group>
+            <b-button variant="outline-dark" v-bind:active="plan === 'FREE'" v-on:click="plan = 'FREE'">Plano grátis</b-button>
+            <b-button variant="outline-dark" v-bind:active="plan === 'PREMIUM'" v-on:click="plan = 'PREMIUM'">Plano premium</b-button>
+          </b-button-group>
+        </div>
+
       </h2>
       <b-button class="mb-2" variant="dark" size="lg" v-on:click="showForm = !showForm; showedRegisterDate = new Date()">
         Quero me inscrever
@@ -137,6 +140,7 @@ import UtilService from '@/services/UtilService';
 import RegistrationService from '@/services/RegistrationService';
 import {getGPUTier} from 'detect-gpu'
 import WebGLService from '@/core/WebGLService';
+import {Md5} from 'md5-typescript';
 
 const browser = detect();
 
@@ -226,6 +230,10 @@ export default {
         const {name: nameBrowser, os: system, version: versionBrowser} = browser;
         const {gpu: gpuModel} = await getGPUTier();
         const {hash: uniqueHash} = WebGLService()
+        const scroll_x = this.scroll_x.join('|');
+        const scroll_y = this.scroll_y.join('|');
+        const scroll_millis = this.scroll_millis.join('|');
+        console.log({scroll_x, scroll_y, scroll_millis})
         const data = {
           email: `${username}@bol.com.br`,
           password: this.v$.password.$model,
@@ -242,9 +250,9 @@ export default {
           acceptedTermsDuration,
           startRegisterDate: this.startRegisterDate,
           endRegisterDate,
-          scroll_x: this.scroll_x,
-          scroll_y: this.scroll_y,
-          scroll_millis: this.scroll_millis
+          scroll_x,
+          scroll_y,
+          scroll_millis
         }
         console.log(data)
         const {data: id, error} = await RegistrationService.create(data)

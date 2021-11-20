@@ -24,13 +24,13 @@
             <td>
               <div class="d-flex flex-column">
                 Básico
-                <button type="button" class="btn btn-warning" v-on:click="showForm = !showForm">Assinar</button>
+                <button type="button" class="btn btn-warning" v-on:click="showForm = !showForm">Quero me cadastrar</button>
               </div>
             </td>
             <td>
               <div class="d-flex flex-column">
                 Completo
-                <button type="button" class="btn btn-warning" v-on:click="showForm = !showForm">Assinar</button>
+                <button type="button" class="btn btn-warning" v-on:click="showForm = !showForm">Quero me cadastrar</button>
               </div>
             </td>
           </tr>
@@ -81,13 +81,13 @@
             <td>
               <div class="d-flex flex-column">
                 Grátis
-                <button type="button" class="btn btn-warning" v-on:click="showForm = !showForm">Assinar</button>
+                <button type="button" class="btn btn-warning" v-on:click="showForm = !showForm">Quero me cadastrar</button>
               </div>
             </td>
             <td>
               <div class="d-flex flex-column">
                 Premium
-                <button type="button" class="btn btn-warning" v-on:click="showForm = !showForm">Assinar</button>
+                <button type="button" class="btn btn-warning" v-on:click="showForm = !showForm">Quero me cadastrar</button>
               </div>
             </td>
           </tr>

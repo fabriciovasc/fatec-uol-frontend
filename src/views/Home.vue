@@ -1,8 +1,8 @@
 <template>
-  <div class="home container vh-100">
+  <div class="home vh-100">
     <div class="row h-100">
 
-      <div >
+      <div>
         <FormRegistration></FormRegistration>
       </div>
 

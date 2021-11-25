@@ -104,7 +104,9 @@
                          v-bind:class="{'is-valid': this.validCaptcha, 'is-invalid': !this.validCaptcha}"
                          @keydown="keydown"
                          @keyup="keyup"
-                         @focusin="startCounter">
+                         @focusin="startCounter"
+                         @paste.prevent
+                         autocomplete="off">
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
                   <button type="button" class="btn btn-outline-secondary" v-on:click="generateCaptcha">Atualizar</button>

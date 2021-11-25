@@ -104,9 +104,11 @@
                          v-bind:class="{'is-valid': this.validCaptcha, 'is-invalid': !this.validCaptcha}"
                          @keydown="keydown"
                          @keyup="keyup"
+                         @focusout="stopCounter"
                          @focusin="startCounter"
                          @paste.prevent
-                         autocomplete="off">
+                         autocomplete="off"
+                         maxlength="6">
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
                   <button type="button" class="btn btn-outline-secondary" v-on:click="generateCaptcha">Atualizar</button>
@@ -124,7 +126,7 @@
 
 
         <div class="col-12 mb-4 text-end">
-          <b-button type="submit" variant="success">
+          <b-button type="submit" variant="success" >
             <b-spinner small v-if="status === 'LOADING'"></b-spinner>
             Criar e-mail
             <b-icon-chevron-right></b-icon-chevron-right>
@@ -273,7 +275,21 @@ export default {
       if (!this.interval) {
         this.interval = setInterval(() => {
           this.time++;
+          console.log('time', this.time)
         }, 1);
+      }
+    },
+    stopCounter() {
+      if (this.typedCaptcha.length) {
+        this.typedCaptcha = ''
+        this.keyDowns = []
+        this.keyUps = []
+        this.time = 0
+      }
+      if (this.interval && !this.keyUps.length && !this.keyDowns.length) {
+        clearInterval(this.interval)
+        this.time = 0
+        this.interval = null
       }
     },
     generateCaptcha() {

@@ -280,7 +280,7 @@ export default {
       }
     },
     stopCounter() {
-      if (this.typedCaptcha.length) {
+      if (!this.typedCaptcha.length) {
         this.typedCaptcha = ''
         this.keyDowns = []
         this.keyUps = []

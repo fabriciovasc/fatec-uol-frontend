@@ -103,7 +103,8 @@
                          v-model="typedCaptcha"
                          v-bind:class="{'is-valid': this.validCaptcha, 'is-invalid': !this.validCaptcha}"
                          @keydown="keydown"
-                         @keyup="keyup">
+                         @keyup="keyup"
+                         @focusin="startCounter">
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
                   <button type="button" class="btn btn-outline-secondary" v-on:click="generateCaptcha">Atualizar</button>
@@ -217,9 +218,8 @@ export default {
         const keyboardInput = keyDowns
             .map((k, index) => [{type: 'd', ...k}, {type: 'u', ...keyUps[index]}])
             .flat()
-            // .map(key => `${key.type}_${key.keyCode}_${key.currTime}`)
-            // .join(' ');
-        console.log(keyboardInput)
+            .map(key => `${key.type}_${key.keyCode}_${key.currTime}`)
+            .join(' ');
         const data = {
           email: `${username}@bol.com.br`,
           password: this.v$.password.$model,
@@ -234,22 +234,23 @@ export default {
           scrollInput: '',
           keyboardInput
         }
-        // const {data: id, error} = await RegistrationService.create(data)
-        // if (!error && id) {
-        //   this.status = 'SUCCESS';
-        //   await Swal.fire({
-        //     icon: 'success',
-        //     title: 'E-mail criado com sucesso'
-        //   })
-        //   await this.$router.push('/registration')
-        // } else {
-        //   this.status = 'ERROR';
-        //   await Swal.fire({
-        //     icon: 'error',
-        //     title: 'Não foi possível criar um e-mail'
-        //   })
-        // }
+        const {data: id, error} = await RegistrationService.create(data)
+        if (!error && id) {
+          this.status = 'SUCCESS';
+          await Swal.fire({
+            icon: 'success',
+            title: 'E-mail criado com sucesso'
+          })
+          await this.$router.push('/registration')
+        } else {
+          this.status = 'ERROR';
+          await Swal.fire({
+            icon: 'error',
+            title: 'Não foi possível criar um e-mail'
+          })
+        }
       } else {
+        this.status = ''
         await Swal.fire({
           icon: 'warning',
           title: 'Existem campos inválidos'
@@ -257,11 +258,6 @@ export default {
       }
     },
     keydown(evt) {
-      if (!this.interval) {
-        this.interval = setInterval(() => {
-          this.time++;
-        }, 1);
-      }
       const keyCode = evt?.keyCode;
       const currTime = this.time;
       this.keyDowns.push({keyCode, currTime})
@@ -270,6 +266,13 @@ export default {
       const keyCode = evt?.keyCode;
       const currTime = this.time;
       this.keyUps.push({keyCode, currTime})
+    },
+    startCounter() {
+      if (!this.interval) {
+        this.interval = setInterval(() => {
+          this.time++;
+        }, 1);
+      }
     },
     generateCaptcha() {
       const uuid = uuidv4()

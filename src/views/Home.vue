@@ -1,5 +1,5 @@
 <template>
-  <div class="home vh-100 cont">
+  <div class="home vh-100 container">
     <div class="row h-100">
 
       <div>

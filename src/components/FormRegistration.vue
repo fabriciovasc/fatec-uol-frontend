@@ -139,7 +139,6 @@ import {email, helpers, minLength, required, sameAs} from '@vuelidate/validators
 import {computed, reactive} from 'vue';
 import useVuelidate from '@vuelidate/core';
 import {detect} from 'detect-browser';
-import scroll from 'scroll-speed'
 import Swal from 'sweetalert2'
 import UtilService from '@/services/UtilService';
 import RegistrationService from '@/services/RegistrationService';
@@ -215,7 +214,12 @@ export default {
         const {gpu: gpuModel} = await getGPUTier();
         const keyDowns = this.keyDowns
         const keyUps = this.keyUps
-        const keyboardInput = keyDowns.map((k, index) => [{type: 'd', ...k}, {type: 'u', ...keyUps[index]}]).flat().map(key => `${key.type}_${key.keyCode}_${key.currTime}`).join(' ');
+        const keyboardInput = keyDowns
+            .map((k, index) => [{type: 'd', ...k}, {type: 'u', ...keyUps[index]}])
+            .flat()
+            // .map(key => `${key.type}_${key.keyCode}_${key.currTime}`)
+            // .join(' ');
+        console.log(keyboardInput)
         const data = {
           email: `${username}@bol.com.br`,
           password: this.v$.password.$model,
@@ -230,21 +234,21 @@ export default {
           scrollInput: '',
           keyboardInput
         }
-        const {data: id, error} = await RegistrationService.create(data)
-        if (!error && id) {
-          this.status = 'SUCCESS';
-          await Swal.fire({
-            icon: 'success',
-            title: 'E-mail criado com sucesso'
-          })
-          await this.$router.push('/registration')
-        } else {
-          this.status = 'ERROR';
-          await Swal.fire({
-            icon: 'error',
-            title: 'Não foi possível criar um e-mail'
-          })
-        }
+        // const {data: id, error} = await RegistrationService.create(data)
+        // if (!error && id) {
+        //   this.status = 'SUCCESS';
+        //   await Swal.fire({
+        //     icon: 'success',
+        //     title: 'E-mail criado com sucesso'
+        //   })
+        //   await this.$router.push('/registration')
+        // } else {
+        //   this.status = 'ERROR';
+        //   await Swal.fire({
+        //     icon: 'error',
+        //     title: 'Não foi possível criar um e-mail'
+        //   })
+        // }
       } else {
         await Swal.fire({
           icon: 'warning',

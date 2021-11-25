@@ -208,7 +208,7 @@ export default {
       this.status = 'LOADING';
       await this.v$.$validate();
       const [username] = this.v$.email.$model.toString()?.split('@');
-      if (!this.v$.$invalid) {
+      if (!this.v$.$invalid && this.validCaptcha) {
         const {ip} = await UtilService.getClientIp();
         const userAgent = navigator.userAgent;
         const {name: nameBrowser, os: system, version: versionBrowser} = browser;

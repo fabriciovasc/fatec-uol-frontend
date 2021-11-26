@@ -35,6 +35,7 @@
               <td>{{registration.browser}}</td>
               <td>
                 <button type="button" class="btn btn-sm btn-link" v-on:click.prevent="registration.show = !registration.show; showDuplicates(registration.id)">
+                  Duplicados
                   <b-icon-caret-down v-show="!registration.show"></b-icon-caret-down>
                   <b-icon-caret-up v-show="registration.show"></b-icon-caret-up>
                 </button>
@@ -42,7 +43,7 @@
             </tr>
             <tr v-if="registration.show">
               <td class="p-3" colspan="6">
-                <div v-if="registration.status === 'loading'">
+                <div class="text-center" v-if="registration.status === 'loading'">
                   <b-spinner label="Spinning"></b-spinner>
                   <h4>Buscando usuários duplicados...</h4>
                 </div>
@@ -61,7 +62,7 @@
                   <h4>Nenhum resultado foi encontrado</h4>
                 </div>
                 <div style="font-weight: bold;" v-if="registration.user_recognition_result?.user_duplicates?.length && registration.status === 'success'">
-                  <h5 style="font-weight: bold;">Assertividade: {{registration.user_recognition_result?.accuracy}}%</h5>
+                  <h5 style="font-weight: bold;">Score: {{registration.user_recognition_result?.accuracy}}%</h5>
                   <p>Resultados:</p>
                   <table class="table table-sm table-bordered" style="font-size: 12px;">
                     <thead>

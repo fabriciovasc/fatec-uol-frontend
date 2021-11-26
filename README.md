@@ -2,7 +2,8 @@
 Repositório de desenvolvimento do front-end do Aprendizado por Projeto Integrador (API) da FATEC São José dos Campos.
 
 ## :clipboard: Requisitos
-Você precisará do Node.js versão 6.0 ou superior instalado em seu sistema.
+- Node >= 12
+- Vue CLI Service
 
 ## :gear: Configuração
 ### Clonar o projeto
@@ -18,10 +19,13 @@ Dentro da raiz do projeto existe um arquivo chamado **.env** que recebe uma vari
 
 Exemplo
 ```
-VUE_APP_ROOT_API=https://8080-plum-dormouse-qwr6rh3l.ws-us18.gitpod.io/
+VUE_APP_ROOT_API=https://desolate-sands-04735.herokuapp.com//
 ```
 
 ### Rodar projeto
 ```
 npm run serve
 ```
+
+### Acessar ambiente publicado
+- Link: https://pure-refuge-94212.herokuapp.com/#/sign-up
